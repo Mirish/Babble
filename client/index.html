@@ -1,0 +1,61 @@
+<html>
+<head>
+  <link rel="stylesheet" type="text/css" href="/styles/main.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+  <script>
+  // Client code
+    var counter = 0;
+    var poll = function() {
+    $.getJSON('/poll/'+counter, function(response) {
+        counter = response.count;
+        var elem = $('#output');
+        elem.text(elem.text() + response.append);
+        poll();
+    });
+    }
+    poll();
+
+  </script>
+</head>
+<body>
+  <header>
+        <img class="logo" src="images/babble-logo.png" alt="">
+  </header>
+  <nav class="sideNav">
+    
+  </nav>
+  <main class="main">
+    <div class="CounterLine">
+      <label class="floaLeft" >Vegans</label>
+      <div class="floatRight">
+        <img  src="images/msgcount-icon.png" alt="">
+        6
+        <img  src="images/usercount-icon.png" alt="">
+        7
+      </div>
+    </div>
+    <br><br>
+    <div class="Message" >
+      
+      At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
+      At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
+      At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
+      At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
+      At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
+      At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
+      At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies. 
+    </div>
+    
+    <div class="newMessage" >
+      <textarea class="textreaNewMsg">
+      At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies. 
+      </textarea>
+      <button class="submitButton" type ="button" aria-label="Send"><img src="images/submit-button-frame.png"> </button>
+        
+      </button>
+    </div> 
+ 
+  </main>
+</body>
+</html>
