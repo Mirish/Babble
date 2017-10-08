@@ -1,98 +1,76 @@
-<html>
+<!DOCTYPE html>
 <head>
-  <link rel="stylesheet" type="text/css" href="/styles/main.css">
+  <title>Vegans - Babble</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="styles/main.css">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
-  <script>
-  // Client code
-    var counter = 0;
-    var poll = function() {
-    $.getJSON('/poll/'+counter, function(response) {
-        counter = response.count;
-        var elem = $('#output');
-        elem.text(elem.text() + response.append);
-        poll();
-    });
-    }
-    poll();
-
-  </script>
+  <script src="scripts/main.js"></script>
 </head>
 <body>
   <header>
         <img class="logo" src="images/babble-logo.png" alt="">
-        	<a class="button" href="#popup1">Let me Pop up</a>
+        	<a class="button" id="PopUpButton" href="#popup1"></a>
   </header>
-  <nav class="sideNav">
-    
+  <nav>
+   
   </nav>
+  
   <main class="main">
-
-
-    <div id="popup1" class="overlay">
-      <div class="popup">
-        <a class="close" href="#">&times;</a>
-        <div class="content" >
-          <label class="headLable">Who are you? </label>
-          <br>
-          <form action="">
-            <div class="FormLineDiv">
-              <div class="PopUpLabelDiv">
-                <label  >Full Name</label>
-              </div>
-              <div class="PopUpInputDiv">    
-                <input type="text" name="FullName" placeholder="">
-              </div>
-              <div class="PopUpLabelDiv">
-                <label>Email</label>
-              </div>
-              <div class="PopUpInputDiv">    
-                <input type="text" name="Email" placeholder="">
-              </div>
-            </div>
-            <!--
-            <div>
-            <label class ="fullNameLable" for="lname">Email</label>
-            </div>
-            <div>
-            <input type="text"name="Email" placeholder="">
-            </div>
-          -->
-            <input type="submit" value="Submit">
-          </form>
-        </div>
-      </div>
-    </div>
-
-
+   
     <div class="CounterLine">
       <label class="floaLeft" >Vegans</label>
       <div class="floatRight">
         <img  src="images/msgcount-icon.png" alt="">
-        6
+        <label id="msgCounter"></label>
         <img  src="images/usercount-icon.png" alt="">
-        7
+        <label id="usersCounter"></label>
       </div>
     </div>
-    <br><br>
-    <div class="Message" >
-      
-      At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
-      At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
-      At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
-      At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
-      At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
-      At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies.
-      At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies. 
+    <br>
+    <!-- All messages OL -->
+    <div class="Message">
+      <ol id="msgOL"></ol>
     </div>
-    
-    <div class="newMessage" >
-      <textarea class="textreaNewMsg">
-      At w3schools.com you will learn how to make a website. We offer free tutorials in all web development technologies. 
-      </textarea>
-      <button class="submitButton" type ="button" aria-label="Send"><img src="images/submit-button-frame.png"> </button>
-    </div> 
- 
+
+    <form action="javascript:void(0);" onsubmit="SendNewMsg()">
+      <div class="newMessage" >
+        <textarea id="newMessageTextID" class="textreaNewMsg" required></textarea>
+        <button class="submitButton" type ="submit" aria-label="Send"><img src="images/submit-button-frame.png"> </button>
+      </div> 
+    </form>
   </main>
+
+  <div id="popup1" class="overlay">
+      <div class="popup">
+        <!-- <a class="close" href="" id="closePopUp">&times;</a> -->
+        <div class="content" >
+          <label class="headLabel">Who are you? </label>
+          <br><br>
+            <div class="FormLineDiv">
+              <div class="PopUpLabelDiv">
+                <label>Full Name:</label>
+              </div>
+              <div class="PopUpInputDiv">    
+                <input type="text" id="FullNameID" name="FullName" placeholder="">
+              </div>
+            </div>
+            <br>
+            <div class="FormLineDiv">
+                <div class="PopUpLabelDiv">
+                  <label>Email:</label>
+                </div>
+                <div class="PopUpInputDiv">    
+                  <input type="email" id="EmailID" name="Email" placeholder="">
+                </div>
+            </div>
+          <br>
+          <div class="ButtonsDiv">
+            <input type="submit" class="ButtonSave" value="Save" onclick="setUser()" >
+            
+          </div>
+          <button onclick="setAnonymous()" class="ButtonStayAnonymous" >Stay Anonymous</button>
+        </div>
+      </div>
+    </div>
 </body>
 </html>
