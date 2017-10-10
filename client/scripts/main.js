@@ -40,7 +40,10 @@ function SendNewMsg(){
 function getMessagesFromServer(num){
   babble.getMessages(num,HandleGetMessagesResponse);
 }
-
+/************ delete messages *****************/
+function deleteMessage(id){
+ babble.deleteMessage(id,HandleDeleteMessagesResponse);
+}
 /****************** Client API ********************************/
 
 babble.register = function(userInfo){
@@ -48,22 +51,17 @@ babble.register = function(userInfo){
   if(userInfo != null && userInfo.name != null && userInfo.email != null && userInfo.name != "" && userInfo.email != ""  ){
     localStorage.setItem("babble",JSON.stringify(babble)); 
     hidePopUp();
+
+    getMessagesFromServer(NumOfMsgCounter);
+    babble.getStats(HandleStatResponse); 
+    
+    window.setTimeout(function(){
+        //send connected user message
+        var connectedPost = new XMLHttpRequest();
+        connectedPost.open('POST', 'http://localhost:9000/connected');
+        connectedPost.send();
+    },500);
   }
-
-  
-  /*
-  var StatRequest = new XMLHttpRequest();
-  StatRequest.open('POST', 'http://localhost:9000/register');
-
-  StatRequest.addEventListener('loadend',function(e){
-
-      localStorage.setItem("babble",JSON.stringify(babble)); 
-      
-      babble.getStats(HandleStatResponse);
-    }
-  );
-  StatRequest.send(JSON.stringify(userInfo));
-  */
 }
 
 babble.getStats = function(callback){
@@ -81,7 +79,7 @@ babble.postMessage = function(message, callback)
 {
   var MessagePostRequest = new XMLHttpRequest();
   MessagePostRequest.open('POST', 'http://localhost:9000/messages');
-  MessagePostRequest.addEventListener('load',
+  MessagePostRequest.addEventListener('loadend',
     function(e){
       if(MessagePostRequest.status == 200){
         var  res = MessagePostRequest.response;
@@ -105,6 +103,17 @@ babble.getMessages = function(counter, callback){
   getMsgRequest.send();
 }
 
+babble.deleteMessage = function(id, callback){
+    var delMsg = new XMLHttpRequest();
+    delMsg.open('DELETE', 'http://localhost:9000/messages/'+id);
+    delMsg.addEventListener('loadend',
+      function(e){ 
+        callback( JSON.parse(delMsg.response)  );
+      }
+    );
+    delMsg.send();
+}
+
 /****************** END Client API ********************************/
 
 
@@ -120,8 +129,9 @@ function hidePopUp(){
 function HandleStatResponse(obj){
   document.getElementById("usersCounter").innerHTML  = obj.users;
   document.getElementById("msgCounter").innerHTML = obj.messages;
- 
 
+  //long polling req
+  babble.getStats(HandleStatResponse); 
 }
 
 function HandlePostMessagesResponse(response){
@@ -130,20 +140,53 @@ function HandlePostMessagesResponse(response){
 
 function HandleGetMessagesResponse(response){
   var OL = document.getElementById('msgOL');
-  for(var i =0 ; i < response.length ; i++,NumOfMsgCounter++){
-    OL.appendChild(get_li_For_msg(response[i].name,response[i].pichash,response[i].message,response[i].timestamp));
+  //alert(JSON.stringify(response));
+ 
+ if( response.type == 1){ // all
+    //remove all messages
+      while(OL.childNodes.length > 0){
+        OL.removeChild(OL.firstChild)
+      }
+      // change counter to 0 to poll all the messages
+      NumOfMsgCounter = 0;  
   }
-  //
-  
+
+  // display all messages
+  for(var i =0 ; i < response.msgs.length ; i++,NumOfMsgCounter++){
+      currentmessage = response.msgs[i];
+      OL.appendChild(get_li_For_msg(currentmessage.id,currentmessage.name,currentmessage.pichash,currentmessage.message,currentmessage.timestamp));
+    }
+
+  // long polling call
+  getMessagesFromServer(NumOfMsgCounter); 
 }
 
 // Help function to create single message
-function get_li_For_msg(name,pic,messagetext,timestamp){
+function get_li_For_msg(id,name,pic,messagetext,timestamp){
  var MsgDate = new Date(timestamp );
 
  var node = document.createElement("li");
- node.innerHTML = "<div class=\"SingleMsg\"> <div class=\"SingleMessageImage\"><img class=\"ProfileImage\" src=\"https://www.gravatar.com/avatar/"+pic+"?s=30\"> </div> <div class=\"SingleMessageTextBox\"> <div> <label class=\"SingleMessageUsernameText\">"+name+"</label> <label class=\"SingleMessageTimeText\">"+MsgDate.getHours()+":"+MsgDate.getMinutes()+"</label> </div> <div class=\"SingleMessageMessageBox\">"+messagetext+"</div> </div> </div><br>";
+  var localid = id*10;
+ var deleteCode = "";
+ if( babble.userInfo.name == name && babble.userInfo.name != "Anonymous"){
+   var newid = localid+1;
+   deleteCode += "<div class=\"deleteMessageDiv\" tabindex=\""+newid+"\"><button onclick=\"deleteMessage("+id+")\" class=\"deleteButton\" aria-label=\"close_"+id+"\"><img src=\"images/delete-icon.png\" alt\"\"></button></div>";
+ }
+ var localpic = ""
+ if( name == "Anonymous"){
+    localpic="images/anonymous.png";
+ }else{
+  localpic="https://www.gravatar.com/avatar/"+pic+"?s=30";
+ }
+
+ var localtime = +MsgDate.getHours()+":"+MsgDate.getMinutes();
+ //node.innerHTML += ; 
+ node.innerHTML = "<div class=\"SingleMsg\" ><div class=\"SingleMessageImage\"><img class=\"ProfileImage\" src=\""+localpic+"\"></div> <div class=\"SingleMessageTextBox\" tabindex=\""+localid+"\"><div><div class=\"messageNameAndTimeDiv\"><cite class=\"SingleMessageUsernameText\">"+name+"</cite> <time class=\"SingleMessageTimeText\" datetime=\""+localtime+"\">"+localtime+"</time></div>"+deleteCode+"</div><div class=\"SingleMessageMessageBox\">"+messagetext+"</div> </div> </div><br>";
  return node;
+}
+
+function HandleDeleteMessagesResponse(res){
+
 }
 
 /* page on load event */
@@ -158,23 +201,67 @@ window.onload = function(){
     // load correct data at page load
     babble.userInfo.name = localBabble.userInfo.name;
     babble.userInfo.email = localBabble.userInfo.email;
+
+
+    getMessagesFromServer(NumOfMsgCounter);
+    babble.getStats(HandleStatResponse); 
+    
+    window.setTimeout(function(){
+      if( performance.navigation.type == 0 ){ // if the page was entered using url 
+        //send connected user message
+        var connectedPost = new XMLHttpRequest();
+        connectedPost.open('POST', 'http://localhost:9000/connected');
+        connectedPost.send();
+      }else{
+          // to read the first time the stat if the user was connected already and refreshed the page
+          var StatRequest = new XMLHttpRequest();
+          StatRequest.open('POST', 'http://localhost:9000/stats');
+          StatRequest.addEventListener('loadend',
+            function(e){ 
+              HandleStatResponse( JSON.parse(StatRequest.response)  );
+            }
+          );
+          StatRequest.send();
+      }
+
+    },500);
+
+
   }
 
-  window.setInterval(function(){
-    babble.getStats(HandleStatResponse); 
-    getMessagesFromServer(NumOfMsgCounter); 
-  }, 300);
 
-  //send connected user message
-  var connectedPost = new XMLHttpRequest();
-  connectedPost.open('POST', 'http://localhost:9000/connected');
-  connectedPost.send();
 };
+function discconnect(){
+  var disconnectedPUT = new XMLHttpRequest();
+  disconnectedPUT.open('DELETE', 'http://localhost:9000/connected');
+  disconnectedPUT.addEventListener('load',
+            function(e){ 
+                //alert("test");
+            }
+          );
+  disconnectedPUT.timeout = 500;
+  disconnectedPUT.send();
+  return 3+1+5+4+5+4;
+}
 
-window.addEventListener("beforeunload", function(e){
+window.addEventListener('beforeunload', function () {
+  var x = discconnect();
+
+  return null;
+});
+
+
+
+
+  //alert(performance.navigation.type);
+
+/*
+window.addEventListener("unload", function(e){
   var connectedPUT = new XMLHttpRequest();
   connectedPUT.open('DELETE', 'http://localhost:9000/connected');
   connectedPUT.send();
 }, true);
+*/
+
 
 

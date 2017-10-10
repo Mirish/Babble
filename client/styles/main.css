@@ -70,9 +70,27 @@ nav {
     height : 50px;
     margin-top: 1%;
     margin-right:1%;
-
+    cursor: pointer;  
+}
+.deleteButton{
+    background-color:transparent;
+    border : 0px none transparent;
+    margin-top: 1%;
+    margin-right:2%;
     cursor: pointer;
+    float: right;  
+}
+.deleteMessageDiv{
+    float:right;
+    position: relative;
+    display: none;
+}
+.deleteMessageDiv:focus{
+    display: unset;
+}
+.messageNameAndTimeDiv{
     
+    display: inline-block;
 }
 
 /* popup styles */
@@ -204,20 +222,36 @@ li{
     height: 40px;
 }
 .ProfileImage{
-    border-radius: 10px;
+    border-radius: 25px;
 }
 
 .SingleMessageTextBox{
     display: inline-block;
     border-radius: 10px;
     border: 1px solid #ebebeb;
-    max-width: 85%;
+    max-width: 600px;
     min-width: 40%;
     background-color: white;
     margin-left:5px;
+    outline:none;
 
 }
+.SingleMessageTextBox:hover .deleteMessageDiv{
+    background-color: #ebebeb;
+    display: unset;
+}
+.SingleMessageTextBox:hover{
+    background-color: #ebebeb;
+}
 
+.SingleMessageTextBox:focus{
+    background-color: #ebebeb;
+}
+
+.SingleMessageTextBox:focus .deleteMessageDiv{
+    background-color: #ebebeb;
+    display: unset;
+}
 .SingleMessageUsernameText{
     color: black;
     font-family: "Nunito";  

@@ -17,6 +17,9 @@ module.exports = {
     },
 
     getMessages : function(counter) {
+      if(counter < 0 ){
+        return [];
+    }
       var CurrMsgs = [];
 
       for(var i = counter ; i < allusersMessages.length; i++){
@@ -25,6 +28,7 @@ module.exports = {
             message: allusersMessages[i].message,
             timestamp : allusersMessages[i].timestamp,
             pichash: md5(allusersMessages[i].email),
+            id: allusersMessages[i].id,
           }
             CurrMsgs.push(obj);
       }
@@ -38,8 +42,6 @@ module.exports = {
                break;
            }
       }
-
-      return CurrMsgs;
     }
 
 

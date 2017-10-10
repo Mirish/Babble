@@ -16,7 +16,7 @@
   "scripts": {
     "test": "",
     "serverRun": "node server/main.js",
-    "fileRun": "http-server ./client -p 8080 --cors=* ",
+    "fileRun": "http-server ./client -p 8080 ",
     "start": "npm-run-all -p -r  fileRun"
   },
   "repository": {

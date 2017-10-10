@@ -7,6 +7,8 @@ var clientutil = require('./clients-util');
 
 //console.log(messagesutil);
 var clients = [];
+var StatClient = [];
+var globalcounter = 0;
 //404 response
 function send404reponse(response)
 {
@@ -33,7 +35,8 @@ function ServerHandle(req, res) {
 //res.setHeader('Access-Control-Allow-Headers', 'authorization, content-type');
 res.setHeader('Access-Control-Allow-Origin','*');
 res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-res.setHeader('Access-Control-Allow-Methods', 'POST,GET,OPTIONS,PUT,DELETE');
+res.setHeader('Access-Control-Allow-Methods', "POST,GET,PUT,DELETE");
+//res.setHeader("content-type", "application/json");
     // parse URL
 var url_parts = url.parse(req.url); 
 if(url_parts.pathname.substr(0, 9) == '/messages') {
@@ -43,8 +46,18 @@ if(url_parts.pathname.substr(0, 9) == '/messages') {
               var queryArray = url_parts.query.split("=");
               var Num = parseInt(queryArray[1]);
               if( queryArray[0] == "counter" && isNaN(Num) == false){
-                res.statusCode = 200;
-                res.end(JSON.stringify(messagesutil.getMessages(Num)));
+                // check if we have new messages
+                if( messagesutil.getNumberOfMessages() > Num){
+                  res.statusCode = 200;
+                  res.end(JSON.stringify({ 
+                      "type": 0, // incremental
+                      "msgs" : messagesutil.getMessages(Num)
+                    }
+                  ));
+                }else{
+                  clients.push(res); // save the connection for long polling
+                  //console.log("Add response object");
+                }
               }else{
                 res.statusCode = 400; // bad request
                 res.end();
@@ -68,7 +81,78 @@ if(url_parts.pathname.substr(0, 9) == '/messages') {
 
                     res.statusCode = 200;
                     res.end();
+
+
+                    //console.log("Message written");
+                    
+                     while(clients.length > 0 ){
+                        var SingleClient = clients.pop();
+                        SingleClient.statusCode = 200;
+                        SingleClient.end(
+                          JSON.stringify({ 
+                              "type": 0, // incremental
+                              "msgs" : messagesutil.getMessages(messagesutil.getMessages(messagesutil.getNumberOfMessages()-1))
+                            }
+                          )
+                        );
+                      }
+
+
+                    LongPollingGetStatResponse();
+
+
                 });
+            }
+            break;
+            case "OPTIONS":
+            {
+              var del = req.rawHeaders[11]; // for edge & firefox
+              if(del != "DELETE" ){
+                del = req.rawHeaders[5]; // for chrome
+              }
+
+              switch(del){
+                  case 'DELETE':
+                  {
+                      console.log("delete message");
+                      //get message id number
+                      var splitparts = url_parts.pathname.split("/");
+                      var id = parseInt(splitparts[2]);
+                      if(isNaN(id)){
+                        res.statusCode = 400;
+                        res.end();
+                        return;
+                      }
+                      // Delete one message
+                      messagesutil.deleteMessage(id);
+                      
+                      res.statusCode = 200;
+                      res.end();
+
+                      while(clients.length > 0 ){
+                        var SingleClient = clients.pop();
+                        SingleClient.statusCode = 200;
+                        SingleClient.end(
+                          JSON.stringify({ 
+                              "type": 1, // all
+                              "msgs" : messagesutil.getMessages(0)
+                            }
+                          ));
+                      }
+
+                      LongPollingGetStatResponse();
+
+                  }
+                  break;
+                  default:
+                  {
+                    res.statusCode = 405; // not allowed
+                    res.end();
+                  }
+                  break;
+              }
+              
+            
             }
             break;
           }
@@ -76,13 +160,19 @@ if(url_parts.pathname.substr(0, 9) == '/messages') {
     switch(req.method){
       case "GET":
       {
-        res.statusCode = 200;
-        res.end(
-          JSON.stringify({
-          "messages": messagesutil.getNumberOfMessages(),
-          "users": clientutil.getNumberOfConnectedUsers(),
-          })
-        );
+        //console.log("getStat command")
+        StatClient.push( res);
+      }
+      break;
+      case "POST":
+      {
+          LongPollingGetStatResponse();
+      }
+      break;
+      default:
+      {
+        res.statusCode = 405;
+        res.end();
       }
       break;
     }
@@ -92,6 +182,11 @@ if(url_parts.pathname.substr(0, 9) == '/messages') {
       case "POST": // connected
       {
         clientutil.AddConnectedClient();
+         console.log("user connected");
+        res.statusCode = 200;
+        res.end();
+        LongPollingGetStatResponse();
+
       }
       break;
       case "OPTIONS":
@@ -100,6 +195,16 @@ if(url_parts.pathname.substr(0, 9) == '/messages') {
           case "DELETE":
           {
               clientutil.removeConnectedClient();
+              console.log("user disconnected");
+              res.statusCode = 200;
+              res.end();
+              LongPollingGetStatResponse();
+          }
+          break;
+          default:
+          {
+            res.statusCode = 405; // not allowed
+            res.end();
           }
           break;
         }
@@ -107,8 +212,26 @@ if(url_parts.pathname.substr(0, 9) == '/messages') {
       }
       break;
     }
+  }else{
+    res.statusCode = 404;
+    res.end();
   }
 }
-http.createServer(ServerHandle).listen(9000, '192.168.0.85');
+//http.createServer(ServerHandle).listen(9000, '192.168.0.85');
 http.createServer(ServerHandle).listen(9000, 'localhost');
 console.log('Server running.');
+
+function LongPollingGetStatResponse(){
+//console.log("Curr StatClient size: " + StatClient.length);
+ while(StatClient.length > 0 ){
+    var SingleClient = StatClient.pop();
+    SingleClient.statusCode = 200;
+    SingleClient.end(JSON.stringify(
+        {
+          "users": clientutil.getNumberOfConnectedUsers(),
+          "messages": messagesutil.getNumberOfMessages(),
+        }
+      )
+    );
+  }
+}
