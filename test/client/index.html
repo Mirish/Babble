@@ -1,0 +1,88 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mocha Tests</title>
+  <link rel="stylesheet" href="../../node_modules/mocha/mocha.css">		
+</head>
+<body>
+  <div id="mocha"></div>
+
+  <div id="myModal" class="modal" hidden="hidden">           
+        <header>
+                <img class="logo" src="images/babble-logo.png" alt="">
+                    <a class="button" id="PopUpButton" href="#popup1"></a>
+        </header>
+        <nav>
+        
+        </nav>
+        
+        <main class="main">
+        
+            <div class="CounterLine">
+            <label class="floaLeft" >Vegans</label>
+            <div class="floatRight">
+                <img  src="images/msgcount-icon.png" alt="">
+                <label id="msgCounter"></label>
+                <img  src="images/usercount-icon.png" alt="">
+                <label id="usersCounter"></label>
+            </div>
+            </div>
+            <br>
+            <!-- All messages OL -->
+            <div class="Message">
+            <ol id="msgOL"></ol>
+            </div>
+
+            <form action="javascript:void(0);" onsubmit="SendNewMsg()">
+            <div class="newMessage" >
+                <textarea id="newMessageTextID" class="textreaNewMsg" required></textarea>
+                <button class="submitButton" type ="submit" aria-label="Send"><img src="images/submit-button-frame.png" alt=""> </button>
+            </div> 
+            </form>
+        </main>
+
+        <div id="popup1" class="overlay">
+            <div class="popup">
+                <!-- <a class="close" href="" id="closePopUp">&times;</a> -->
+                <div class="content" >
+                <label class="headLabel">Who are you? </label>
+                <br><br>
+                    <div class="FormLineDiv">
+                    <div class="PopUpLabelDiv">
+                        <label>Full Name:</label>
+                    </div>
+                    <div class="PopUpInputDiv">    
+                        <input type="text" id="FullNameID" name="FullName" placeholder="">
+                    </div>
+                    </div>
+                    <br>
+                    <div class="FormLineDiv">
+                        <div class="PopUpLabelDiv">
+                        <label>Email:</label>
+                        </div>
+                        <div class="PopUpInputDiv">    
+                        <input type="email" id="EmailID" name="Email" placeholder="">
+                        </div>
+                    </div>
+                <br>
+                <div class="ButtonsDiv">
+                    <input type="submit" class="ButtonSave" value="Save" onclick="setUser()" >
+                    
+                </div>
+                <button onclick="setAnonymous()" class="ButtonStayAnonymous" >Stay Anonymous</button>
+                </div>
+            </div>
+            </div>
+    
+  </div>
+ 
+
+  <script src="../../node_modules/mocha/mocha.js"></script>
+  <script src="../../node_modules/chai/chai.js"></script>
+  <script src="../../node_modules/sinon/pkg/sinon.js"></script>
+  <script>mocha.setup('bdd')</script>  
+  <script src="../../client/scripts/main.js"></script>
+  <script src="test_client_test_js.js"></script>
+  <script>     mocha.run();    </script>
+</body>
+</html>

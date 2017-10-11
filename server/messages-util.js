@@ -24,13 +24,21 @@ module.exports = {
 
       for(var i = counter ; i < allusersMessages.length; i++){
           var obj = {
-            name: allusersMessages[i].name,
             message: allusersMessages[i].message,
-            timestamp : allusersMessages[i].timestamp,
-            pichash: md5(allusersMessages[i].email),
             id: allusersMessages[i].id,
           }
-            CurrMsgs.push(obj);
+
+          // the test requires only id and message - without and email & timestamp & name
+          if( allusersMessages[i].name != undefined){
+            obj.name = allusersMessages[i].name;
+          }
+          if( allusersMessages[i].timestamp != undefined){
+            obj.timestamp = allusersMessages[i].timestamp;
+          }
+          if( allusersMessages[i].email != undefined){
+            obj.pichash = md5(allusersMessages[i].email);
+          }
+          CurrMsgs.push(obj);
       }
 
       return CurrMsgs;

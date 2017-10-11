@@ -7,17 +7,20 @@
     "test": "test"
   },
   "dependencies": {
+    "chai": "^4.1.2",
     "express": "^4.16.1",
-    "md5": "^2.2.1"
+    "md5": "^2.2.1",
+    "mocha": "^4.0.1",
+    "sinon": "^4.0.1"
   },
   "devDependencies": {
     "npm-run-all": "^4.1.1"
   },
   "scripts": {
-    "test": "",
+    "test": "mocha test/server/test_server_test_js.js & http-server -a localhost -p 8081",
     "serverRun": "node server/main.js",
     "fileRun": "http-server ./client -p 8080 ",
-    "start": "npm-run-all -p -r  fileRun"
+    "start": "npm-run-all -p -r fileRun serverRun"
   },
   "repository": {
     "type": "git",

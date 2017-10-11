@@ -71,16 +71,17 @@ if(url_parts.pathname.substr(0, 9) == '/messages') {
                  req.on('data',chunk =>{
                     var Answer = JSON.parse(chunk);
                     
-                    if( Answer.name == null || Answer.name == "" || Answer.email == null || Answer.email == ""||
-                      Answer.message == null || Answer.message == "" || Answer.timestamp == null || Answer.timestamp == ""){
+                    if( Answer.name == null ||  Answer.email == null || Answer.message == null || Answer.message == "" || Answer.timestamp == null || Answer.timestamp == ""){
                         res.statusCode = 400; // bad request
                         res.end();
                         return;
                     }
-                    messagesutil.addMessage(Answer);
+                    var msgid = messagesutil.addMessage(Answer);
 
                     res.statusCode = 200;
-                    res.end();
+                    res.end({
+                      "id": msgid,
+                    });
 
 
                     //console.log("Message written");
@@ -107,7 +108,7 @@ if(url_parts.pathname.substr(0, 9) == '/messages') {
             case "OPTIONS":
             {
               var del = req.rawHeaders[11]; // for edge & firefox
-              if(del != "DELETE" ){
+              if(del != "DELETE" && del != "PUT" ){
                 del = req.rawHeaders[5]; // for chrome
               }
 
@@ -144,9 +145,15 @@ if(url_parts.pathname.substr(0, 9) == '/messages') {
 
                   }
                   break;
+                  case "PUT":
+                  {
+                    res.statusCode = 405; // not allowed 
+                    res.end();
+                  }
+                  break;
                   default:
                   {
-                    res.statusCode = 405; // not allowed
+                    res.statusCode = 204; 
                     res.end();
                   }
                   break;
@@ -169,12 +176,35 @@ if(url_parts.pathname.substr(0, 9) == '/messages') {
           LongPollingGetStatResponse();
       }
       break;
-      default:
+      case "OPTIONS":
       {
-        res.statusCode = 405;
-        res.end();
+        var con = req.rawHeaders[11]; // for edge & firefox
+        if(con != "DELETE" && con != "PUT" ){
+          con = req.rawHeaders[5]; // for chrome
+        }
+        switch(con){
+          case "DELETE":
+          {
+            res.statusCode = 405; // not allowed
+            res.end();
+          }
+          break;
+          case "PUT":
+          {
+            res.statusCode = 405; // not allowed
+            res.end();
+          }
+          break;
+          default:
+          {
+            res.statusCode = 204; // not allowed
+            res.end();
+          }
+          break;
+        }
       }
       break;
+      
     }
   }else if(url_parts.pathname.substr(0, 10) == '/connected') {
     
@@ -191,7 +221,11 @@ if(url_parts.pathname.substr(0, 9) == '/messages') {
       break;
       case "OPTIONS":
       {
-        switch(req.rawHeaders[5]){
+        var con = req.rawHeaders[11]; // for edge & firefox
+        if(con != "DELETE" && con != "PUT" ){
+          con = req.rawHeaders[5]; // for chrome
+        } 
+        switch(con){
           case "DELETE":
           {
               clientutil.removeConnectedClient();
@@ -201,9 +235,15 @@ if(url_parts.pathname.substr(0, 9) == '/messages') {
               LongPollingGetStatResponse();
           }
           break;
-          default:
+          case "PUT":
           {
             res.statusCode = 405; // not allowed
+            res.end();
+          }
+          break;
+          default:
+          {
+            res.statusCode = 204; // not allowed
             res.end();
           }
           break;
