@@ -86,10 +86,10 @@ window.Babble = {
         MessagePostRequest.open('POST', 'http://localhost:9000/messages');
         MessagePostRequest.addEventListener('loadend',
           function(e){
-            if(MessagePostRequest.status == 200){
+            //if(MessagePostRequest.status == 200){
               var  res = MessagePostRequest.response;
-              callback(res);
-            }
+              callback(JSON.parse(res));
+            //}
 
           }
         );
