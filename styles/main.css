@@ -1,342 +1,61 @@
-
-
-.Header {
-    width : 100%;
-    height: 100px;
-    background-color: #353744;
-    
+.Header{width:100%;height:100px;background-color:#353744;}
+dt, dd ,dl{display:inline-block;margin:0px;}
+body{margin:0;font-family:"Nunito";}
+.Header-logo{margin-top:10px;margin-left:10px;}
+nav{min-height:calc(100% - 100px);position:absolute;width:160px;background-color:#61d290;}
+.Main{background-color:#f6f6f6;width:calc(100% - 160px);height:calc(100% - 100px);position:absolute;margin-left:160px;}
+.u-floatRightMargin20{float:right;margin-right:20px;}
+.u-floatLeftMargin20{float:left;margin-left:20px;}
+.NewMessage-textrea{width:80%;float:left;border:0 none white;margin-top:10px;height:50px;max-height:300px;}
+.NewMessage{position:fixed;height:25%;width:100%;background-color:white;}
+.Messages{height:75%;overflow:auto;border-bottom:1px solid #dfdfdf;width:100%;}
+.NewMessage-submitButton{background-color:white;border:0px none white;width:50px;height:50px;margin-top:1%;margin-right:1%;cursor:pointer;}
+.SingleMessage-deleteButton{background-color:transparent;border:0px none transparent;margin-top:1%;margin-right:2%;cursor:pointer;float:right;}
+.SingleMessage-deleteMessageDiv{float:right;position:relative;}
+.noDisplay{display:none;}
+.SingleMessage-deleteMessageDiv:focus{display:unset;}
+.SingleMessage-nameAndTimeDiv{display:inline-block;}
+.u-width100{width:100%;}
+.Popup-window-LabelDiv{width:20%;display:inline-block;font-size:13px;color:grey;}
+.Popup-window-inputDiv{width:69%;display:inline-block;}
+input[type=text],input[type=email]{padding:6px 10px;margin:8px 0;border:1px solid #ccc;border-radius:6px;box-sizing:border-box;width:100%;font-size:14px;font-weight:bold;}
+.Popup-window-stayAnonymousBtn{float:right;background:linear-gradient(#cdcdcd,#b6b6b6);background:-webkit-linear-gradient(#cdcdcd, #b6b6b6);background:-o-linear-gradient(#cdcdcd, #b6b6b6);background:-moz-linear-gradient(#cdcdcd, #b6b6b6);color:black;border:0;border-radius:0px;width:120px;height:20px;font-size:13px;margin-right:73px;position:absolute;bottom:10%;right:10%;cursor:pointer;}
+.Popup-window-saveBtn{float:right;margin-left:5px;font-size:13px;background:linear-gradient(#69c45a,#4ca671);background:-webkit-linear-gradient(#69c45a, #4ca671);background:-o-linear-gradient(#69c45a, #4ca671);background:-moz-linear-gradient(#69c45a, #4ca671);color:white;border:0;border-radius:0px;width:70px;height:20px;position:absolute;bottom:10%;right:10%;cursor:pointer;}
+.Popup{position:fixed;top:0;bottom:0;left:0;right:0;background:rgba(0, 0, 0, 0.7);transition:opacity 500ms;opacity:0;}
+.hiddenVisibility{visibility:hidden;}
+.Popup:target{visibility:visible;opacity:1;}
+.Popup-window{margin:10% auto;padding:20px;background:#fff;border-radius:5px;width:30%;position:relative;transition:all 2s ease-in-out;}
+.Popup-window .close{position:absolute;top:10px;right:20px;transition:all 200ms;font-size:30px;font-weight:bold;text-decoration:none;color:#333;}
+.Popup-window .content{overflow:auto;}
+.Popup-window-headLabel{font-size:20px;}
+li{list-style-type:none;}
+.SingleMessage-divImage{float:left;width:40px;height:40px;}
+.SingleMessagep-profileImage{border-radius:25px;}
+.SingleMessage-textBox{display:inline-block;border-radius:10px;border:1px solid #ebebeb;max-width:600px;min-width:35%;background-color:white;margin-left:5px;outline:none;}
+.SingleMessage-textBox:hover .SingleMessage-deleteMessageDiv{background-color:#ebebeb;display:unset;}
+.SingleMessage-textBox:hover{background-color:#ebebeb;}
+.SingleMessage-textBox:focus{background-color:#ebebeb;}
+.SingleMessage-textBox:focus .SingleMessage-deleteMessageDiv{background-color:#ebebeb;display:unset;}
+.SingleMessage-usernameText{color:black;font-family:"Nunito";font-size:12px;font-weight:bold;margin-left:5px;}
+.SingleMessage-timeText{color:grey;font-family:"Nunito";font-size:10px;margin-left:5px;margin-right:5px;}
+.SingleMessage-messageBox{margin:5px;font-family:"Nunito";font-size:12px;word-break:break-all;}
+@media screen and (min-width:639px) and (max-width:1200px){nav{width:0px;}
+.Main{margin-left:0px;width:100%;}
+.NewMessage-textrea{width:90%;}
+.Popup-window{width:60%;height:70%;}
+.Popup-window-LabelDiv{width:100%;}
 }
-dt, dd ,dl{
-  display: inline-block;
-  margin:0px;
+@media screen and (min-width:321px) and (max-width:638px){nav{width:0px;}
+.Main{margin-left:0px;width:100%;}
+.NewMessage-textrea{width:70%;}
+.Popup-window{width:70%;height:80%;}
+.Popup-window-LabelDiv{width:100%;}
+.u-floatRightMargin20{float:right;margin-right:17%;}
 }
-
-
-body{
-    margin: 0;
-        font-family: "Nunito";
+@media screen and (min-width:0px) and (max-width:320px){nav{width:0px;}
+.Main{margin-left:0px;width:100%;}
+.NewMessage-textrea{width:70%;}
+.Popup-window{width:70%;height:70%;}
+.Popup-window-LabelDiv{width:100%;}
+.u-floatRightMargin20{float:right;margin-right:17%;}
 }
-
-.Header-logo {
-    margin-top: 10px;
-    margin-left: 10px;
-}
-
-nav {
-    min-height: calc(100% - 100px);
-    position: absolute;
-    width: 160px;
-    background-color: #61d290; 
-}
-
-.Main {
-    background-color: #f6f6f6;
-    width: calc(100% - 160px);
-    height: calc(100% - 100px);
-    position: absolute;
-    margin-left: 160px;
-
-}
-
-.u-floatRightMargin20{
-    float: right;
-    margin-right: 20px;
-}
-
-.u-floatLeftMargin20{
-   float: left;
-   margin-left: 20px;
-}
-.NewMessage-textrea{
-    width: 80%;
-    float: left;
-    border: 0 none white;
-    margin-top: 10px;
-    height: 50px;
-    max-height: 300px;
-}
-.NewMessage{
-  position: fixed;
-  height: 25%;
-  width: 100%;
-  background-color: white;
-}
-
-.Messages{
-    height: 75%;
-    overflow: auto;
-    border-bottom: 1px solid #dfdfdf;
-    width: 100%;
-}
-.NewMessage-submitButton{
-    background-color: white;
-    border : 0px none white;
-    width : 50px;
-    height : 50px;
-    margin-top: 1%;
-    margin-right:1%;
-    cursor: pointer;  
-}
-.SingleMessage-deleteButton{
-    background-color:transparent;
-    border : 0px none transparent;
-    margin-top: 1%;
-    margin-right:2%;
-    cursor: pointer;
-    float: right;  
-}
-.SingleMessage-deleteMessageDiv{
-    float:right;
-    position: relative;
-    
-}
-
-.noDisplay{
-    display: none;
-}
-.SingleMessage-deleteMessageDiv:focus{
-    display: unset;
-}
-.SingleMessage-nameAndTimeDiv{
-    
-    display: inline-block;
-}
-
-/* popup styles */
-.u-width100{
-    width: 100%;
-}
-.Popup-window-LabelDiv{
-    width: 20%;
-    display: inline-block;
-    font-size: 13px;
-    color: grey;
-}
-.Popup-window-inputDiv{
-    width: 69%;
-    display: inline-block;
-}
-input[type=text],input[type=email] {
-    padding: 6px 10px;
-    margin: 8px 0;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    box-sizing: border-box;
-    width: 100%;
-    font-size: 14px;
-    font-weight:bold;
-}
-.Popup-window-stayAnonymousBtn{
-    float: right;
-    background: linear-gradient(#cdcdcd,#b6b6b6 );
-    background: -webkit-linear-gradient(#cdcdcd, #b6b6b6); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(#cdcdcd, #b6b6b6); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#cdcdcd, #b6b6b6); /* For Firefox 3.6 to 15 */
-    color: black;
-    border: 0;
-    border-radius: 0px;
-    width: 120px;
-    height: 20px; 
-    font-size: 13px;
-    margin-right: 73px;
-    position: absolute;
-    bottom: 10%;
-    right: 10%;
-    cursor: pointer;
-}
-.Popup-window-saveBtn{
-    float: right;
-    margin-left: 5px;
-    font-size: 13px;
-    background: linear-gradient(#69c45a,#4ca671 );
-    background: -webkit-linear-gradient(#69c45a, #4ca671); /* For Safari 5.1 to 6.0 */
-    background: -o-linear-gradient(#69c45a, #4ca671); /* For Opera 11.1 to 12.0 */
-    background: -moz-linear-gradient(#69c45a, #4ca671); /* For Firefox 3.6 to 15 */
-    color: white;
-    border: 0;
-    border-radius: 0px;
-    width: 70px;
-    height: 20px; 
-    position: absolute;
-    bottom: 10%;
-    right: 10%;
-    cursor: pointer;
-    
-}
-
-.Popup {
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: rgba(0, 0, 0, 0.7);
-  transition: opacity 500ms;
-  opacity: 0;
-}
-
-.hiddenVisibility{
-  visibility: hidden;  
-}
-
-.Popup:target {
-  visibility: visible;
-  opacity: 1;
-}
-.Popup-window {
-  margin: 10% auto;
-  padding: 20px;
-  background: #fff;
-  border-radius: 5px;
-  width: 30%;
-  position: relative;
-  transition: all 2s ease-in-out;
-}
-.Popup-window .close {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  transition: all 200ms;
-  font-size: 30px;
-  font-weight: bold;
-  text-decoration: none;
-  color: #333;
-}
-.Popup-window .content {
-  overflow: auto;
- 
-}
-
-.Popup-window-headLabel{
-    font-size: 20px;
-}
-li{
-    list-style-type: none;
-}
-.SingleMessage-divImage{
-   float: left;
-    width: 40px; 
-    height: 40px;
-}
-.SingleMessagep-profileImage{
-    border-radius: 25px;
-}
-
-.SingleMessage-textBox{
-    display: inline-block;
-    border-radius: 10px;
-    border: 1px solid #ebebeb;
-    max-width: 600px;
-    min-width: 35%;
-    background-color: white;
-    margin-left:5px;
-    outline:none;
-
-}
-.SingleMessage-textBox:hover .SingleMessage-deleteMessageDiv{
-    background-color: #ebebeb;
-    display: unset;
-}
-.SingleMessage-textBox:hover{
-    background-color: #ebebeb;
-}
-
-.SingleMessage-textBox:focus{
-    background-color: #ebebeb;
-}
-
-.SingleMessage-textBox:focus .SingleMessage-deleteMessageDiv{
-    background-color: #ebebeb;
-    display: unset;
-}
-.SingleMessage-usernameText{
-    color: black;
-    font-family: "Nunito";  
-    font-size: 12px;
-    font-weight: bold;
-    margin-left: 5px;
-}
-
-.SingleMessage-timeText{
-    color: grey;
-    font-family: "Nunito";
-    font-size: 10px;
-    margin-left: 5px;
-    margin-right:5px;
-}
-.SingleMessage-messageBox{
-    margin: 5px;
-    font-family: "Nunito";
-    font-size: 12px;
-    word-break:break-all;
-}
-
-
-@media screen and (min-width: 639px) and (max-width: 1200px) {
-    nav {
-        width: 0px;  
-    }
-    .Main {
-        margin-left: 0px;
-        width: 100%;
-    }
-    .NewMessage-textrea{
-        width: 90%;
-    }
-    .Popup-window {
-        width: 60%;
-        height: 70%;
-    }
-    .Popup-window-LabelDiv{
-        width: 100%;
-    }
-}
-@media screen and (min-width: 321px) and (max-width: 638px) {
-    nav {
-        width: 0px;  
-    }
-    .Main {
-        margin-left: 0px;
-        width: 100%;
-    }
-    .NewMessage-textrea{
-        width: 70%;
-    }
-    .Popup-window { 
-        width: 70%;
-        height: 80%;
-    }
-    .Popup-window-LabelDiv{
-        width: 100%;
-    }
-    .u-floatRightMargin20{
-        float: right;
-        margin-right: 17%;
-    }
-    
-}
-@media screen and (min-width: 0px) and (max-width: 320px) {
-    nav {
-        width: 0px;
-    } 
-    .Main {
-        margin-left: 0px;
-        width: 100%;
-    }
-    .NewMessage-textrea{
-        width: 70%;
-    }
-    .Popup-window {
-        width: 70%;
-        height: 70%;
-        
-    }
-    .Popup-window-LabelDiv{
-        width: 100%;
-    }
-    .u-floatRightMargin20{
-        float: right;
-        margin-right: 17%;
-    }
-}
-
