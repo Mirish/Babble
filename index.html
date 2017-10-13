@@ -7,68 +7,67 @@
   <script src="scripts/main.js"></script>
 </head>
 <body>
-  <header>
-        <img class="logo" src="images/babble-logo.png" alt="">
-        	<a class="button" id="PopUpButton" href="#popup1"></a>
+  <header class="Header">
+        <img class="Header-logo" src="images/babble-logo.png" alt="">
+        	<a id="PopUpButton" href="#popup1"></a>
   </header>
   <nav>
    
   </nav>
   
-  <main class="main">
+  <main class="Main">
    
-    <div class="CounterLine">
-      <label class="floaLeft" >Vegans</label>
-      <div class="floatRight">
-        <img  src="images/msgcount-icon.png" alt="">
-        <label id="msgCounter"></label>
-        <img  src="images/usercount-icon.png" alt="">
-        <label id="usersCounter"></label>
-      </div>
+    <div>
+      <label class="u-floatLeftMargin20" >Vegans</label>
+      <dl class="u-floatRightMargin20">
+        <dt><img  src="images/msgcount-icon.png" alt=""></dt>
+        <dd id="msgCounter"></dd>
+        <dt><img  src="images/usercount-icon.png" alt=""></dt>
+        <dd id="usersCounter"></dd>
+      </dl>
     </div>
     <br>
     <!-- All messages OL -->
-    <div class="Message">
+    <div class="Messages">
       <ol id="msgOL"></ol>
     </div>
 
     <form action="javascript:void(0);" onsubmit="SendNewMsg()">
-      <div class="newMessage" >
-        <textarea id="newMessageTextID" class="textreaNewMsg" required></textarea>
-        <button class="submitButton" type ="submit" aria-label="Send"><img src="images/submit-button-frame.png" alt=""> </button>
+      <div class="NewMessage" >
+        <textarea id="newMessageTextID" class="NewMessage-textrea" required></textarea>
+        <button class="NewMessage-submitButton" type ="submit" aria-label="Send"><img src="images/submit-button-frame.png" alt=""> </button>
       </div> 
     </form>
   </main>
 
-  <div id="popup1" class="overlay">
-      <div class="popup">
-        <!-- <a class="close" href="" id="closePopUp">&times;</a> -->
+  <div id="popup1" class="Popup hiddenVisibility">
+      <div class="Popup-window">
         <div class="content" >
-          <label class="headLabel">Who are you? </label>
+          <label class="Popup-window-headLabel">Who are you? </label>
           <br><br>
-            <div class="FormLineDiv">
-              <div class="PopUpLabelDiv">
+            <div class="u-width100">
+              <div class="Popup-window-LabelDiv">
                 <label>Full Name:</label>
               </div>
-              <div class="PopUpInputDiv">    
+              <div class="Popup-window-inputDiv">    
                 <input type="text" id="FullNameID" name="FullName" placeholder="">
               </div>
             </div>
             <br>
-            <div class="FormLineDiv">
-                <div class="PopUpLabelDiv">
+            <div>
+                <div class="Popup-window-LabelDiv">
                   <label>Email:</label>
                 </div>
-                <div class="PopUpInputDiv">    
+                <div class="Popup-window-inputDiv">    
                   <input type="email" id="EmailID" name="Email" placeholder="">
                 </div>
             </div>
           <br>
           <div class="ButtonsDiv">
-            <input type="submit" class="ButtonSave" value="Save" onclick="setUser()" >
+            <input type="submit" class="Popup-window-saveBtn" value="Save" onclick="setUser()" >
             
           </div>
-          <button onclick="setAnonymous()" class="ButtonStayAnonymous" >Stay Anonymous</button>
+          <button onclick="setAnonymous()" class="Popup-window-stayAnonymousBtn" >Stay Anonymous</button>
         </div>
       </div>
     </div>

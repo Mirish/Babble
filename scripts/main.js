@@ -27,8 +27,8 @@ function setAnonymous(){
 function setUser(){
 
   var obj  = {
-     name : (document.getElementById("EmailID")).value,
-    email : (document.getElementById("FullNameID")).value,
+     name : (document.getElementById("FullNameID")).value,
+    email : (document.getElementById("EmailID")).value,
   };
   Babble.register(obj);
   window.location.href = window.location.href.split("#")[0];
@@ -88,7 +88,12 @@ window.Babble = {
           function(e){
             //if(MessagePostRequest.status == 200){
               var  res = MessagePostRequest.response;
-              callback(JSON.parse(res));
+              if(res != null && res != "undifiend" && res != ""){
+                  callback(JSON.parse(res));
+              }else{
+                callback("");
+              }
+              
             //}
 
           }
@@ -175,7 +180,7 @@ function get_li_For_msg(id,name,pic,messagetext,timestamp){
  var deleteCode = "";
  if( babble.userInfo.name == name && babble.userInfo.name != ""){
    var newid = localid+1;
-   deleteCode += "<div class=\"deleteMessageDiv\" tabindex=\""+newid+"\"><button onclick=\"Babble.deleteMessage("+id+",HandleDeleteMessagesResponse)\" class=\"deleteButton\" aria-label=\"close_"+id+"\"><img src=\"images/delete-icon.png\" alt\"\"></button></div>";
+   deleteCode += "<div class=\"SingleMessage-deleteMessageDiv noDisplay\" tabindex=\""+newid+"\"><button onclick=\"Babble.deleteMessage("+id+",HandleDeleteMessagesResponse)\" class=\"SingleMessage-deleteButton\" aria-label=\"close_"+id+"\"><img src=\"images/delete-icon.png\" alt\"\"></button></div>";
  }
  var localpic = ""
  if( name == ""){
@@ -186,7 +191,7 @@ function get_li_For_msg(id,name,pic,messagetext,timestamp){
 
  var localtime = +MsgDate.getHours()+":"+MsgDate.getMinutes();
  //node.innerHTML += ; 
- node.innerHTML = "<div class=\"SingleMsg\" ><div class=\"SingleMessageImage\"><img class=\"ProfileImage\" src=\""+localpic+"\"></div> <div class=\"SingleMessageTextBox\" tabindex=\""+localid+"\"><div><div class=\"messageNameAndTimeDiv\"><cite class=\"SingleMessageUsernameText\">"+name+"</cite> <time class=\"SingleMessageTimeText\" datetime=\""+localtime+"\">"+localtime+"</time></div>"+deleteCode+"</div><div class=\"SingleMessageMessageBox\">"+messagetext+"</div> </div> </div><br>";
+ node.innerHTML = "<div class=\"SingleMsg\" ><div class=\"SingleMessage-divImage\"><img class=\"SingleMessagep-profileImage\" src=\""+localpic+"\"></div> <div class=\"SingleMessage-textBox\" tabindex=\""+localid+"\"><div><div class=\"SingleMessage-nameAndTimeDiv\"><cite class=\"SingleMessage-usernameText\">"+name+"</cite> <time class=\"SingleMessage-timeText\" datetime=\""+localtime+"\">"+localtime+"</time></div>"+deleteCode+"</div><div class=\"SingleMessage-messageBox\">"+messagetext+"</div> </div> </div><br>";
  return node;
 }
 
