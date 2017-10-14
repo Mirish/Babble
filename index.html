@@ -37,7 +37,7 @@
     <form action="javascript:void(0);" onsubmit="SendNewMsg()">
       <div class="NewMessage" >
         <textarea id="newMessageTextID" class="NewMessage-textrea" required></textarea>
-        <button class="NewMessage-submitButton" type ="submit" aria-label="Send" for="newMessageTextID"><img src="images/submit-button-frame_.gif" alt=""> </button>
+        <button class="NewMessage-submitButton" type ="submit" aria-label="Send"><img src="images/submit-button-frame_.gif" alt=""> </button>
       </div> 
     </form>
   </main>
@@ -45,7 +45,7 @@
   <div id="popup1" class="Popup hiddenVisibility">
       <div class="Popup-window">
         <div class="content" >
-          <label class="Popup-window-headLabel">Who are you? </label>
+          <label class="Popup-window-headLabel" for="popup1">Who are you? </label>
           <br><br>
             <div class="u-width100">
               <div class="Popup-window-LabelDiv">
@@ -66,8 +66,7 @@
             </div>
           <br>
           <div class="ButtonsDiv">
-            <input type="submit" class="Popup-window-saveBtn" value="Save" onclick="setUser()" >
-            
+            <input type="submit" class="Popup-window-saveBtn" value="Save" onclick="setUser()" >  
           </div>
           <button onclick="setAnonymous()" class="Popup-window-stayAnonymousBtn" >Stay Anonymous</button>
         </div>
